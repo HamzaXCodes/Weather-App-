@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Weather App</h1>
+    <p class="subtitle">Search by city name to get weather information</p>
+
+    <!-- Search Box -->
+    <div class="search-box">
+      <input type="text" id="cityInput" placeholder="Enter city name..." />
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <!-- Weather Result Box -->
+    <div class="weather-card" id="weatherCard">
+      <div class="weather-header">
+        <h2 id="cityName">City, Country</h2>
+         <img id="weatherIcon" src="" alt="icon" />
+      </div>
+      <div class="weather-info">
+        <h3 id="temperature">-- °C or -- °F</h3>
+        <p id="description">--</p>
+        <div class="details">
+          <p>Feels Like: <span id="feelsLike">--</span> </p>
+          <p>Humidity: <span id="humidity">--</span>%</p>
+          <p>Wind: <span id="wind">--</span> kph</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <p id="error" class="error-message" hidden>City not found. Please try again.</p>
+  </div>
+
+  <!-- You will add your JavaScript here -->
+  <!-- <script src="app.js"></script> -->
+</body>
+</html>

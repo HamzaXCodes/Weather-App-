@@ -17,33 +17,57 @@ const wind = document.querySelector("#wind");
 // Error message
 const errorMessage = document.querySelector("#error");
 
-// ..........................
-// API fetching:
-
+// =========================
+// API Fetch (FIXED HTTPS)
+// =========================
 async function getData(searchLocation) {
-  const promise = await fetch(
-    `http://api.weatherapi.com/v1/current.json?key=19c07da824054b3d897145033252310&q=${searchLocation}&aqi=yes`
-  );
-  return await promise.json();
-}
+  try {
+    const promise = await fetch(
+      `https://api.weatherapi.com/v1/current.json?key=19c07da824054b3d897145033252310&q=${searchLocation}&aqi=yes`
+    );
 
-// Display Data
-async function handleSearch() {
-  let searchLocation = cityInput.value;
-  if (cityInput.value !== "") {
-    const result = await getData(searchLocation);
-    cityName.textContent = `${result.location.name},${result.location.country}`;
-    weatherIcon.src = "https://cdn.weatherapi.com/weather/64x64/night/116.png";
-    temperature.textContent = `${result.current.temp_c} °C or ${result.current.temp_f} °F`;
-    feelsLike.textContent = `${result.current.feelslike_c} °C or ${result.current.feelslike_f} °F`;
-    humidity.textContent = result.current.humidity;
-    description.textContent = result.location.region;
-    wind.textContent = result.current.wind_kph;
-    cityInput.value = "";
+    if (!promise.ok) throw new Error("City not found");
+
+    return await promise.json();
+  } catch (err) {
+    return null; // Return null so we can handle it
   }
 }
 
+// =========================
+// Display Data
+// =========================
+async function handleSearch() {
+  let searchLocation = cityInput.value.trim();
+
+  if (searchLocation === "") return;
+
+  const result = await getData(searchLocation);
+
+  if (!result) {
+    weatherCard.hidden = true;
+    errorMessage.hidden = false;
+    return;
+  }
+
+  errorMessage.hidden = true;
+  weatherCard.hidden = false;
+
+  cityName.textContent = `${result.location.name}, ${result.location.country}`;
+  weatherIcon.src = "https:" + result.current.condition.icon;  // FIXED
+  temperature.textContent = `${result.current.temp_c} °C / ${result.current.temp_f} °F`;
+  feelsLike.textContent = `${result.current.feelslike_c} °C`;
+  humidity.textContent = result.current.humidity;
+  description.textContent = result.current.condition.text;  // FIXED
+  wind.textContent = result.current.wind_kph;
+
+  cityInput.value = "";
+}
+
+// Search button click
 searchBtn.addEventListener("click", handleSearch);
+
+// Enter key support
 cityInput.addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
     handleSearch();
